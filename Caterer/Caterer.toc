@@ -1,0 +1,21 @@
+## Interface: 11302
+## Title: Caterer
+## Notes: Auto-trades preset stack counts of water & food to players opening trade.
+## Notes-ruRU: Автоматическая раздача еды и воды для игроков, открывающих торговлю.
+## Author: Artur91425
+## Version: 1.6
+## SavedVariablesPerCharacter: CatererDB
+
+## X-Date: 12.12.2017
+## X-Credits: Original author Pik/Silvermoon
+## X-Website: https://vk.com/id65515748
+## X-Category: Mage 
+## X-Commands: /caterer
+
+embeds.xml
+
+locale\enUS.lua
+locale\ruRU.lua
+
+core.lua
+options.lua
