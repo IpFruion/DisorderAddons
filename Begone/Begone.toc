@@ -1,0 +1,14 @@
+## Interface: 11302
+## Title: Begone
+## Notes: Blacklist and Kill list that has both individual lists and guild lists along with other options.
+## Author: IpFruion et. al
+## Version: 0.1
+## SavedVariablesPerCharacter: BegoneDB
+
+## X-Date: 10.18.2019
+## X-Commands: /begone
+
+embeds.xml
+
+Core.lua
+Options.lua
