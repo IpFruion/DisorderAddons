@@ -116,7 +116,8 @@ addon.defaults = {
 		guild = true,
 		other = false
 	},
-	cancel_trade = false
+	cancel_trade = false,
+	partial_trade = false
 }
 
 function addon:OnEvent(event, ...)
@@ -158,7 +159,7 @@ function addon:OnInitialize()
 			tooltip:AddSeparator(6, nil, nil, nil, 0)
 			
 			
-			tooltip.enabled = tooltip:AddLine(L["Enabled"]..':', CatererDB.enabled and L['On'] or L['Off'])
+			tooltip.enabled = tooltip:AddLine('Enabled:', CatererDB.enabled and L['On'] or L['Off'])
 			
 			tooltip:AddSeparator(10, nil, nil, nil, 0)
 			
@@ -187,7 +188,7 @@ function addon:OnInitialize()
 			--tooltip:AddSeparator(10, nil, nil, nil, 0)
 			
 			local hint_line = tooltip:AddLine()
-			tooltip:SetCell(hint_line, 1, '|cff00ff00'..L["Right click on the minimap button to open settings. \nLeft click on the minimap button to toggle enable \nClick on the point tooltip to quickly manage the addon."]..'|r', nil, 'LEFT', 2)
+			tooltip:SetCell(hint_line, 1, '|cff00ff00'.."Right click on the minimap button to open settings. \nLeft click on the minimap button to toggle enable \nClick on the point tooltip to quickly manage the addon."..'|r', nil, 'LEFT', 2)
 			
 			tooltip:SmartAnchorTo(self)
 			tooltip:Show()
@@ -227,7 +228,9 @@ end
 
 function addon:TRADE_SHOW()
 	--if self:IsEventRegistered('UI_ERROR_MESSAGE') then self:UnregisterEvent('UI_ERROR_MESSAGE') end
+	
 	local performTrade = self:CheckTheTrade()
+	--if not performTrade then print("Not performing trade") end
 	if not performTrade then return end
 	
 	local NPCName, NPCClass = UnitName('NPC'):lower(), select(2, UnitClass('NPC'))
@@ -253,6 +256,7 @@ end
 function addon:TRADE_ACCEPT_UPDATE(arg1, arg2)
 	-- arg1 - Player has agreed to the trade (1) or not (0)
 	-- arg2 - Target has agreed to the trade (1) or not (0)
+	print("Accepting trade")
 	if arg2 then
 		AcceptTrade()
 	end
@@ -303,7 +307,7 @@ function addon:CheckTheTrade()
 	-- Check to see whether or not we should execute the trade.
 	local UnitInGroup, UnitInMyGuild, UnitInFriendList
 	
-	if not CatererDB.enabled then return false end
+	if not self.enabled then return false end
 	
 	if UnitInParty('NPC') or UnitInRaid('NPC') then
 		UnitInGroup = true

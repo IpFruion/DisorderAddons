@@ -152,12 +152,12 @@ end)
 
 
 general_frame.cancel_trade = CreateFrame('CheckButton', general_frame:GetName()..'CancelTradeCheckbox', general_frame, 'OptionsCheckButtonTemplate')
-_G[general_frame.cancel_trade:GetName()..'Text']:SetText(L["Auto Cancel Trade"])
+_G[general_frame.cancel_trade:GetName()..'Text']:SetText("Auto Cancel Trade")
 general_frame.cancel_trade:SetPoint('TOPLEFT', general_frame.water_label, 'BOTTOMLEFT', 0, -20)
 
-general_frame.cancel_trade = CreateFrame('CheckButton', general_frame:GetName()..'CancelTradeCheckbox', general_frame, 'OptionsCheckButtonTemplate')
-_G[general_frame.cancel_trade:GetName()..'Text']:SetText(L["Auto Cancel Trade"])
-general_frame.cancel_trade:SetPoint('TOPLEFT', general_frame.water_label, 'BOTTOMLEFT', 0, -10)
+general_frame.partial_trade = CreateFrame('CheckButton', general_frame:GetName()..'PartialTradeCheckbox', general_frame, 'OptionsCheckButtonTemplate')
+_G[general_frame.partial_trade:GetName()..'Text']:SetText("Partial Trades")
+general_frame.partial_trade:SetPoint('TOPLEFT', general_frame.cancel_trade, 'BOTTOMLEFT', 0, -2)
 
 general_frame.trades = {}
 for i, trade in pairs(addon.order.trades) do
@@ -165,7 +165,7 @@ for i, trade in pairs(addon.order.trades) do
 	local text = format('Trade with %s', trade)
 	_G[general_frame.trades[trade]:GetName()..'Text']:SetText(L[text])
 	if i == 1 then
-		general_frame.trades[trade]:SetPoint('TOPLEFT', general_frame.cancel_trade, 'BOTTOMLEFT', 0, -20)
+		general_frame.trades[trade]:SetPoint('TOPLEFT', general_frame.partial_trade, 'BOTTOMLEFT', 0, -20)
 		else
 		general_frame.trades[trade]:SetPoint('TOPLEFT', general_frame.trades[addon.order.trades[(i-1)]], 'BOTTOMLEFT', 0, -2)
 	end
@@ -277,7 +277,7 @@ end
 
 class_filter.retain = {}
 class_filter.retain.label = class_filter:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
-class_filter.retain.label:SetText(L["Retain Amount"])
+class_filter.retain.label:SetText("Retain Amount")
 class_filter.retain.label:SetJustifyH('LEFT')
 class_filter.retain.label:SetWidth(140)
 class_filter.retain.label:SetPoint('TOPLEFT', class_filter.classes[classes_num].label, 'BOTTOMLEFT', 0, -40)
@@ -729,6 +729,8 @@ end
 function config:UpdateConfig()
 	general_frame.enabled:SetChecked(CatererDB.enabled)
 	general_frame.cancel_trade:SetChecked(CatererDB.cancel_trade)
+	general_frame.partial_trade:SetChecked(CatererDB.partial_trade)
+	
 	UIDropDownMenu_SetSelectedValue(general_frame.food, CatererDB.tradeWhat.food)
 	UIDropDownMenu_SetText(general_frame.food, addon.dataTable.food[CatererDB.tradeWhat.food])
 	UIDropDownMenu_SetSelectedValue(general_frame.water, CatererDB.tradeWhat.water)
@@ -767,6 +769,8 @@ function config:SaveChanges()
 		Caterer:OnDisable()
 	end
 	CatererDB.cancel_trade = general_frame.cancel_trade:GetChecked()
+	CatererDB.partial_trade = general_frame.partial_trade:GetChecked()
+	
 	CatererDB.tradeWhat.food = UIDropDownMenu_GetSelectedValue(general_frame.food)
 	CatererDB.tradeWhat.water = UIDropDownMenu_GetSelectedValue(general_frame.water)
 	CatererDB.tradeFilter.friends = general_frame.trades.friends:GetChecked()
